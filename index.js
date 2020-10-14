@@ -33,42 +33,43 @@ const getDescriptionByURL = async function(url, callback) {
     })
 }
 
-const loadVenuesByCategory = async function(category, numVenues, callback) {
-    getByKeyword('', category, async (places) => {
 
-        //Filter by Operational Status
-        operationalPlaces = places.filter(place => place.business_status === "OPERATIONAL");
+//Originally pulling data from Places API
 
-        //Slice to proper number of Venues
-        if(operationalPlaces.length > numVenues) {
-            operationalPlaces = operationalPlaces.slice(0, numVenues);
-        }
+// const loadVenuesByCategory = async function(category, numVenues, callback) {
+//     getByKeyword('', category, async (places) => {
 
-        place_ids = operationalPlaces.map(x => x.place_id);
-        //Get Detailed Place Object for each Venue
-        places.getPlacesById(place_ids, (detailedPlaces) => {
+//         //Filter by Operational Status
+//         operationalPlaces = places.filter(place => place.business_status === "OPERATIONAL");
 
-            let descriptions = [];
-            detailedPlaces = detailedPlaces.map(x => x.result);
-            detailedPlaces = detailedPlaces.filter(x => x.website != undefined);
-            let fetches = [];
-            for (const place of detailedPlaces) {
-                fetches.push(getDescriptionByURL(place.website, (desc) => {
-                    descriptions.push(desc);
-                }));
-            }
+//         //Slice to proper number of Venues
+//         if(operationalPlaces.length > numVenues) {
+//             operationalPlaces = operationalPlaces.slice(0, numVenues);
+//         }
 
-            Promise.all(fetches).then(function() {
-                console.log(descriptions);
-            })
-            callback("Done");
+//         place_ids = operationalPlaces.map(x => x.place_id);
+//         //Get Detailed Place Object for each Venue
+//         places.getPlacesById(place_ids, (detailedPlaces) => {
+
+//             let descriptions = [];
+//             detailedPlaces = detailedPlaces.map(x => x.result);
+//             detailedPlaces = detailedPlaces.filter(x => x.website != undefined);
+//             let fetches = [];
+//             for (const place of detailedPlaces) {
+//                 fetches.push(getDescriptionByURL(place.website, (desc) => {
+//                     descriptions.push(desc);
+//                 }));
+//             }
+
+//             Promise.all(fetches).then(function() {
+//                 console.log(descriptions);
+//             })
+//             callback("Done");
+//         })
 
 
-        })
-
-
-    })
-}
+//     })
+// }
 
 // foursquare.detailedVenue('5209469f11d2d4f85e5b7427', (res) => {
 //     console.log(res);
