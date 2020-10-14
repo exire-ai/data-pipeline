@@ -1,5 +1,11 @@
 const fetch = require('node-fetch');
+const _ = require('lodash');
+
 const { FOURSQUARE_CLIENT_ID ,FOURSQUARE_CLIENT_SECRET } = require('./config.js');
+
+const FoursquareCategories = {
+    Mexican: 'mexican'
+}
 
 const foursquare = {
 
@@ -26,8 +32,43 @@ const foursquare = {
             console.log(err);
             callback(null);
         })
-    }
-
+    },
+    // CONVERTER OBJECT FOR FOURSQUARE
+    FoursquareConversionSchema: {
+        placeID: ['id'],
+        title: ['name'],
+        description: ['description'],
+        tips: ['default', ''],
+        category: ['default', 'food'],
+        subcategory: ['categories', categories => {
+            for (category in categories) {
+                if (_.has(FoursquareCategories, categories[category].shortName)) {
+                    return FoursquareCategories[categories[category].shortName]
+                }
+            }
+            return ''
+        }],
+        type: ['default', 'venue'],
+        imgURL: ['bestPhoto', data => data.prefix + data.suffix.substring(1)],
+        region: ['location.city'],
+        open: [ 'default', 0 ],
+        closed: [ 'default', 0 ],
+        closed_days: ['default', []],
+        latitude: ['location.lat'],
+        longitude: ['location.lng'],
+        address: ['location.formattedAddress'],
+        cost: ['price.tier'],
+        rank: ['rating', val => val / 2],
+        peopleWatching: ['default', 0],
+        linkClicks: ['default', 0],
+        tag: [''],
+        accessURL: ['url'],
+        deliveryURL: ['delivery.url'],
+        menuURL: ['menu.url'],
+        businessID: ['id'],
+        times: ['default', {}],
+        valid: ['default', false]
+    },
 };
 
 module.exports.foursquare = foursquare;

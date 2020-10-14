@@ -3,7 +3,7 @@ var parser = new DomParser();
 
 const { foursquare } = require('./foursquare.js');
 const { places } = require('./googlePlaces.js');
-
+const { general } = require('./general.js');
 
 //Helper function to find a meta tag with given name attribute
 function getMeta(doc, metaName) {
@@ -72,10 +72,10 @@ const getDescriptionByURL = async function(url, callback) {
 // }
 
 // foursquare.detailedVenue('5209469f11d2d4f85e5b7427', (res) => {
-//     console.log(res);
+//     console.log(general.convertData(res, foursquare.FoursquareConversionSchema))
 // })
 
-// places.getByKeyword('gym','Fotografiska', (res) => {
-//     console.log(res);
-// })
+places.getByKeyword('gym','Fotografiska', (res) => {
+    console.log(res);
+})
 
